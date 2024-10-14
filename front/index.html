@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Лабораторная</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana;
+                font-weight: 400;
+            }
+
+            /* под селекторами элементов скорее всего имеются в виду селекторы по тэгам. надо уточнить */
+            header {
+                background-color: rgb(248, 249, 250);
+                padding: 15px;
+                text-align: center;
+                margin-bottom: 100px;
+            }
+
+            img {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            button {
+                color: #212529;
+                border-color: #212529;
+                background-color: #fff;
+                border-width: 1px;
+                border-radius: 5px;
+                font-size: 1rem;
+                text-align: center;
+                line-height: 1.5;
+                padding: 6px 10px;
+                font-weight: 400;
+                margin: 5px;
+                border-style: solid;
+            }
+
+            /* это селектор по аттрибуту. При нажатии на кнопку, ей присваивается аттрибут selected 
+            (и убирается у той кнопки, которая была выделена до этого). 
+            Селектор по аттрибуту selected добавляет тень */
+            button[selected] {
+                box-shadow: 0px 0px 5px #555;
+            }
+
+            /* селектор по псевдоклассу, т.е. какому-то состоянию,
+            в данном случае - при наведении указателя мыши */ 
+            button:hover,
+            .btn:hover {
+                color: #fff;
+                background-color: #212529;
+                cursor: pointer;
+            }
+
+            /*селектор потомства. Т.е. относится к Button, 
+            которые являются потомком элемента с классом x
+            Только первый уровень вложенности!!! (>) */
+            #x > button {
+                flex: 1 1 50px;
+                max-width: 70px;
+            }
+
+            h1, h2 {
+                color: #555;
+            }
+
+            /* для заголовка страницы используем шрифт serif (по заданию),
+            переписываем шрифт, заданный в * */
+            /* цвет наследуется каскадированием от предыдущего селектора h1 */
+            h1 {
+                font-family: serif;
+            }
+
+            /* селекторы идентификаторов, т.е. по id */
+            #x {
+                display: flex;
+                border: 1px solid black;
+                flex-direction: row;
+                justify-content: flex-start;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 30px;
+                flex-wrap: wrap;
+            }
+
+            #y {
+                margin-bottom: 30px;
+            }
+
+            #r {
+                border: 1px solid black;
+                border-radius: 5px;
+                padding: 10px;
+            }
+            #errormessage {
+                color: red;
+                font-size: 12px;
+                margin-bottom: 30px;
+                margin-top: -30px;
+            }
+
+            /* селекторы по классу*/
+            .index {
+                display: flex;
+                flex-direction: row;
+                margin: 0 auto;
+                max-width: 1500px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.135);
+            }
+
+            .contentblock {
+                padding: 10px;
+                min-width: 300px;
+                width: 50%;
+            }
+
+            /* селектор потомств. Элемент h2, являющийся потомком элемента с классом contentblock*/
+            /* цвет наследуется от глобального h2 (каскадность) 
+            любой уровень вложенности */
+            .contentblock h2 {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+            }
+
+            .valN {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+
+            /* на странице незаметно, потому, что присвоено дефолтное значение
+            и плейсхолдер исчезает. Если цифру в текстбоксе удалить, он станет видимым*/
+            #y::placeholder {
+                color: #cdd;
+            }
+
+            /* наследование. Тэги label, input, select внутри контейнера с классом .contentblock 
+            любой уровень вложенности */
+            .contentblock label,
+            .contentblock input,
+            .contentblock select {
+                width: 100%;
+                line-height: 1.5;
+                font-size: 1rem;
+                font-weight: 400;
+                border-width: 1px;
+                border-radius: 5px;
+                padding: 6px 10px;
+            }
+
+            /* это внешний блок, при сжатии экрана меньше 1000px 
+            дивы выстраиваются в одну колонку занимая всю ширину родительского блока*/
+            @media (max-width: 1000px) {
+                .contentblock {
+                    width: 100%;
+                }
+                .index {
+                    flex-direction: column;
+                }
+            }
+        </style>
+        <script>
+            "use strict";
+            // минимальные и максимальные значения для проверок
+            // частично избыточно, так как в кнопках и выпадающем списке
+            // заданы списком значений. По идее проверять нужно только input text
+            let minX = -5;
+            let maxX = 3;
+            let minY = -3;
+            let maxY = 3;
+            let minR = 1;
+            let maxR = 3;
+
+            function setX(button) {
+                // сначала по имени берем массив кнопок и находим кнопку с тенью. тень убираем
+                let allbuttons = document.getElementsByName("varX");
+                for (var i = 0; i < allbuttons.length; i++) {
+                    if (allbuttons[i].getAttribute("selected")) {
+                        allbuttons[i].removeAttribute("selected");
+                    }
+                }
+                // затем рисуем тень у кнопки, которую нажали (присваиваем аттрибут selected)
+                button.setAttribute("selected", true);
+                let val = validateN(button.value, minX, maxX);
+                if (typeof val === "number") {
+                    document.getElementById("valX").innerHTML = button.value;
+                    calc();
+                }
+            }
+
+            function setY(id) {
+                // Передается id текстбокса, чтобы можно было установить его значение после очистки
+                // По умолчанию значения - текстовые. При испоьзовании отрицательных цисел появляется ошибка,
+                // поэтому принудительно конвертируем. Это нужно только для проверки валидности ввода.
+                // на сервере всё равно нужно проверять все значения всех полей.
+                let val = validateN(id.value, minY, maxY);
+                // если просто проверить на 0, 0==false в js
+                if (typeof val === "number") {
+                    document.getElementById("valY").innerHTML = val;
+                    document.getElementById("errormessage").innerHTML = "";
+                    // устанавливает нормализованную строку в поле ввода. без лишних нулей, с точкой вместо запятой и тд
+                    id.value = val;
+                    calc();
+                } else {
+                    document.getElementById("errormessage").innerHTML = "Здесь должно быть число от -3 до 3. вычисления не производятся";
+                }
+            }
+
+            function setR(select) {
+                let r = validateN(select.value, minR, maxR);
+                if (typeof(r) === "number") {
+                    document.getElementById("valR").innerHTML = r;
+                    calc();
+                }
+            }
+
+            function validateN(n, min, max) {
+                n = is_number(n);
+                if (typeof n === "number") {
+                    if (n >= min && n <= max) {
+                        return (n);
+                    }
+                }
+                return(false);
+            }
+
+            function is_number(str) {
+                // считаем, что запятую можно использовать как разделитель
+                // точка в начале допустима, в конце - нет
+                let val = 0;
+                if (/^[\-]*[0-9]*[.,]?[0-9]+$/.test(str)) {
+                    // запятая не является десятичным разделителем, но мы меняем ее на точку
+                    // и считаем, что ввели точку. А в текстбоксе потом поменяем запятую на точку.
+                    // Подразумевается, что локаль русская, нет разделителей разрядов в виде запятой, пробелов и т.д.
+                     val = Number(str.replace(",", "."));
+                } else {
+                    val = false;
+                }
+                return val;
+            }
+
+            function calc() {
+                // пустой объект vars
+                let vars = {};
+                
+                // Можно вставить все проверки в это место
+                
+                // В JavaScript можно добавлять экземплярам объектов новые свойства и функции в процессе выполнения.
+                vars.x = document.getElementById("valX").innerHTML;
+                vars.y = document.getElementById("valY").innerHTML;
+                vars.r = document.getElementById("valR").innerHTML;
+                
+                //Это ajax запрос
+                fetch("/api/", {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                        "Accept": "application/json",
+                    },
+                    body: JSON.stringify(vars),
+                })
+                    .then((response) => response.json())
+                    .then((test) => showResult(JSON.parse(test), vars))
+                    .catch((error) => console.log("Произошла ошибка:", error));
+            }
+
+            /* начальные значения контролов и полей X, Y, R. Полностью хардкод 
+            у селекта дефолтное значение вписано прямо в код 
+            в принципе можно добавить массивы начальных значений 
+            и при загрузке страницы генерить контролы по этим значениям, тогда программа
+            будет более универсальной. Эти же массивы можно использовать как списки
+            допустимых значений */
+            function init() {
+                document.getElementById("y").value = 0;
+                document.getElementById("varX6").setAttribute("selected", true);
+                document.getElementById("valX").innerHTML = 0;
+                document.getElementById("valY").innerHTML = 0;
+                document.getElementById("valR").innerHTML = 1;
+                document.getElementById("valAll").innerHTML = "";
+                document.getElementById("errormessage").innerHTML = "";
+            }
+
+            function showResult(result, vars) {
+                let message = "empty message";
+                let color = "empty color";
+                if (result == true) {
+                    // обратная кавычки - типа f-string
+                    message = `Точка с координатами X=${vars.x} и Y=${vars.y} принадлежит заданной области с R=${vars.r}`;
+                    color = "green";
+                } else {
+                    message = `Точка с координатами X=${vars.x} и Y=${vars.y} не принадлежит заданной области с R=${vars.r}`;
+                    color = "red";
+                }
+                console.log(message);
+                document.getElementById("valAll").style.color = color;
+                document.getElementById("valAll").innerHTML = message;
+            }
+        </script>
+    </head>
+
+    <body onload="init()">
+        <header>
+            <h1>Лабораторная</h1>
+        </header>
+        <div class="index">
+            <div class="contentblock">
+                <img src="img/capture.png" alt="drawing" />
+                <div class="valN">X=<span id="valX"></span></div>
+                <div class="valN">Y=<span id="valY"></span></div>
+                <div class="valN">R=<span id="valR"></span></div>
+                <div class="valN">Результат: <span id="valAll"></span></div>
+            </div>
+            <div class="contentblock">
+                <div>
+                    <h2>Переменные</h2>
+                </div>
+                <fieldset id="x">
+                    <legend>Выбор X</legend>
+                    <button id="varX1" type="button" name="varX" value="-5" onclick="setX(this)">-5</button>
+                    <button id="varX2" type="button" name="varX" value="-4" onclick="setX(this)">-4</button>
+                    <button id="varX3" type="button" name="varX" value="-3" onclick="setX(this)">-3</button>
+                    <button id="varX4" type="button" name="varX" value="-2" onclick="setX(this)">-2</button>
+                    <button id="varX5" type="button" name="varX" value="-1" onclick="setX(this)">-1</button>
+                    <button id="varX6" type="button" name="varX" value="0" onclick="setX(this)">0</button>
+                    <button id="varX7" type="button" name="varX" value="1" onclick="setX(this)">1</button>
+                    <button id="varX8" type="button" name="varX" value="2" onclick="setX(this)">2</button>
+                    <button id="varX9" type="button" name="varX" value="3" onclick="setX(this)">3</button>
+                </fieldset>
+                <div>
+                    <label for="y">Выбор Y</label>
+                    <input id="y" type="text" placeholder="-3...3" onchange="setY(this)" />
+                    <div id="errormessage">-</div>
+                </div>
+                <div>
+                    <label for="r">Выбор R</label>
+                    <select name="varR" id="r" onchange="setR(this)">
+                        <option value="3">3</option>
+                        <option value="2.5">2.5</option>
+                        <option value="2">2</option>
+                        <option value="1.5">1.5</option>
+                        <option value="1" selected>1</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
