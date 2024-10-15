@@ -30,29 +30,34 @@ public class ResponseSender {
             var start = System.currentTimeMillis();
             Dot dot = requestHandler.readRequest();
             try {
-                var status = functionCalc.isInTheSpot(dot);
-                var content = """
-                        
-                        {        
-                            "status" : %s         
-                        }
-                        
-                        """;
-                content = content.formatted(status);
+                //var status = functionCalc.isInTheSpot(dot);
+                //var content = "{\"status\": \"OK\"}";
+                //content = content.formatted(status);
+
+
+
+
                 var httpResponse = """
                         HTTP/1.1 200 OK
-                        Content-Type: application/json
-                        Content-Length: %d
-                                                
-                        %s
-                        """.formatted(content.getBytes(StandardCharsets.UTF_8).length, content);
-
-                logger.warning("status: %s".formatted(status));
-                System.out.println(httpResponse);
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": *
+                        "Access-Control-Allow-Methods": GET,HEAD,OPTIONS,POST,PUT \s
+                        "Access-Control-Allow-Headers": Origin, X-Requested-With, Content-Type, Accept, Authorization                                         
+                        "Content-Length": 16,
+                        
+                        
+                        {
+                        "status": true
+                        }
+                        """;
+                        //.formatted(content.getBytes(StandardCharsets.UTF_8).length, content);
+                logger.info(httpResponse);
+                //logger.warning("status: %s".formatted(status));
                 logger.info("ogo");
 
 
             } catch (Exception e) {
+                logger.warning(e.getMessage());
                 var content = """
                         {
                                             

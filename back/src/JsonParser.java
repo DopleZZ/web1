@@ -24,6 +24,7 @@ public class JsonParser {
             return new Dot((int) values[0], values[1], (int) values[2], true);
         } catch (Exception e) {
             logger.info(e.getMessage());
+            logger.info("gobnishe");
            throw new RuntimeException("Invalid JSON data");
         }
 
