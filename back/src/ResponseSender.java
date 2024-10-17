@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
-public class ResponseSender {
+public class ResponseSender  {
 
     private final FunctionCalc functionCalc;
 
@@ -13,7 +13,7 @@ public class ResponseSender {
     private final RequestHandler requestHandler;
 
 
-    public ResponseSender(FunctionCalc functionCalc, RequestHandler requestHandler) {
+    public ResponseSender(FunctionCalc functionCalc, RequestHandler requestHandler) throws IOException {
         this.functionCalc = functionCalc;
         this.requestHandler = requestHandler;
 
@@ -30,30 +30,27 @@ public class ResponseSender {
             var start = System.currentTimeMillis();
             Dot dot = requestHandler.readRequest();
             try {
-                //var status = functionCalc.isInTheSpot(dot);
-                //var content = "{\"status\": \"OK\"}";
-                //content = content.formatted(status);
-
+                var status = functionCalc.isInTheSpot(dot);
+                var content = """
+                        {"status":"%s"}
+                        """;
+                content = content.formatted(status);
 
 
 
                 var httpResponse = """
                         HTTP/1.1 200 OK
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": *
-                        "Access-Control-Allow-Methods": GET,HEAD,OPTIONS,POST,PUT \s
-                        "Access-Control-Allow-Headers": Origin, X-Requested-With, Content-Type, Accept, Authorization                                         
-                        "Content-Length": 16,
+                        Content-Type: application/json                         
+                        Content-Length: %d
                         
                         
-                        {
-                        "status": true
-                        }
-                        """;
-                        //.formatted(content.getBytes(StandardCharsets.UTF_8).length, content);
+                        %s
+                        """
+                        .formatted(content.getBytes(StandardCharsets.UTF_8).length, content);
                 logger.info(httpResponse);
                 //logger.warning("status: %s".formatted(status));
                 logger.info("ogo");
+                System.out.println(httpResponse);
 
 
             } catch (Exception e) {

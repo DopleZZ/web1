@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ru">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +14,7 @@
                 font-weight: 400;
             }
 
-            /* под селекторами элементов скорее всего имеются в виду селекторы по тэгам. надо уточнить */
+
             header {
                 background-color: rgb(248, 249, 250);
                 padding: 15px;
@@ -42,15 +42,11 @@
                 border-style: solid;
             }
 
-            /* это селектор по аттрибуту. При нажатии на кнопку, ей присваивается аттрибут selected 
-            (и убирается у той кнопки, которая была выделена до этого). 
-            Селектор по аттрибуту selected добавляет тень */
             button[selected] {
                 box-shadow: 0px 0px 5px #555;
             }
 
-            /* селектор по псевдоклассу, т.е. какому-то состоянию,
-            в данном случае - при наведении указателя мыши */ 
+
             button:hover,
             .btn:hover {
                 color: #fff;
@@ -58,9 +54,7 @@
                 cursor: pointer;
             }
 
-            /*селектор потомства. Т.е. относится к Button, 
-            которые являются потомком элемента с классом x
-            Только первый уровень вложенности!!! (>) */
+
             #x > button {
                 flex: 1 1 50px;
                 max-width: 70px;
@@ -70,14 +64,11 @@
                 color: #555;
             }
 
-            /* для заголовка страницы используем шрифт serif (по заданию),
-            переписываем шрифт, заданный в * */
-            /* цвет наследуется каскадированием от предыдущего селектора h1 */
             h1 {
                 font-family: serif;
             }
 
-            /* селекторы идентификаторов, т.е. по id */
+
             #x {
                 display: flex;
                 border: 1px solid black;
@@ -105,7 +96,7 @@
                 margin-top: -30px;
             }
 
-            /* селекторы по классу*/
+
             .index {
                 display: flex;
                 flex-direction: row;
@@ -120,9 +111,6 @@
                 width: 50%;
             }
 
-            /* селектор потомств. Элемент h2, являющийся потомком элемента с классом contentblock*/
-            /* цвет наследуется от глобального h2 (каскадность) 
-            любой уровень вложенности */
             .contentblock h2 {
                 width: 100%;
                 padding: 15px;
@@ -134,14 +122,11 @@
                 font-weight: 600;
             }
 
-            /* на странице незаметно, потому, что присвоено дефолтное значение
-            и плейсхолдер исчезает. Если цифру в текстбоксе удалить, он станет видимым*/
+
             #y::placeholder {
                 color: #cdd;
             }
 
-            /* наследование. Тэги label, input, select внутри контейнера с классом .contentblock 
-            любой уровень вложенности */
             .contentblock label,
             .contentblock input,
             .contentblock select {
@@ -154,8 +139,7 @@
                 padding: 6px 10px;
             }
 
-            /* это внешний блок, при сжатии экрана меньше 1000px 
-            дивы выстраиваются в одну колонку занимая всю ширину родительского блока*/
+
             @media (max-width: 1000px) {
                 .contentblock {
                     width: 100%;
@@ -167,9 +151,6 @@
         </style>
         <script>
             "use strict";
-            // минимальные и максимальные значения для проверок
-            // частично избыточно, так как в кнопках и выпадающем списке
-            // заданы списком значений. По идее проверять нужно только input text
             let minX = -5;
             let maxX = 3;
             let minY = -3;
@@ -178,14 +159,14 @@
             let maxR = 3;
 
             function setX(button) {
-                // сначала по имени берем массив кнопок и находим кнопку с тенью. тень убираем
+
                 let allbuttons = document.getElementsByName("varX");
                 for (var i = 0; i < allbuttons.length; i++) {
                     if (allbuttons[i].getAttribute("selected")) {
                         allbuttons[i].removeAttribute("selected");
                     }
                 }
-                // затем рисуем тень у кнопки, которую нажали (присваиваем аттрибут selected)
+
                 button.setAttribute("selected", true);
                 let val = validateN(button.value, minX, maxX);
                 if (typeof val === "number") {
@@ -195,16 +176,13 @@
             }
 
             function setY(id) {
-                // Передается id текстбокса, чтобы можно было установить его значение после очистки
-                // По умолчанию значения - текстовые. При испоьзовании отрицательных цисел появляется ошибка,
-                // поэтому принудительно конвертируем. Это нужно только для проверки валидности ввода.
-                // на сервере всё равно нужно проверять все значения всех полей.
+
                 let val = validateN(id.value, minY, maxY);
-                // если просто проверить на 0, 0==false в js
+
                 if (typeof val === "number") {
                     document.getElementById("valY").innerHTML = val;
                     document.getElementById("errormessage").innerHTML = "";
-                    // устанавливает нормализованную строку в поле ввода. без лишних нулей, с точкой вместо запятой и тд
+
                     id.value = val;
                     calc();
                 } else {
@@ -231,13 +209,10 @@
             }
 
             function is_number(str) {
-                // считаем, что запятую можно использовать как разделитель
-                // точка в начале допустима, в конце - нет
+
                 let val = 0;
                 if (/^[\-]*[0-9]*[.,]?[0-9]+$/.test(str)) {
-                    // запятая не является десятичным разделителем, но мы меняем ее на точку
-                    // и считаем, что ввели точку. А в текстбоксе потом поменяем запятую на точку.
-                    // Подразумевается, что локаль русская, нет разделителей разрядов в виде запятой, пробелов и т.д.
+
                      val = Number(str.replace(",", "."));
                 } else {
                     val = false;
@@ -246,38 +221,33 @@
             }
 
             function calc() {
-                // пустой объект vars
+
                 let vars = {};
                 
-                // Можно вставить все проверки в это место
-                
-                // В JavaScript можно добавлять экземплярам объектов новые свойства и функции в процессе выполнения.
+
                 vars.x = document.getElementById("valX").innerHTML;
                 vars.y = document.getElementById("valY").innerHTML;
                 vars.r = document.getElementById("valR").innerHTML;
                 
-                //Это ajax запрос
+
                 fetch("/api/", {
                     method: "POST",
-                    mode: "cors",
                     headers: {
                         "Content-Type": "application/json; charset=utf-8",
                         "Accept": "application/json",
                     },
                     body: JSON.stringify(vars),
                 })
-                    .then((response) => response.json()
-                        .then((data) => console.log(data))
+                    .then((response) => response.text())
+                    .then((text) => {
+                        const data = JSON.parse(text);
+                        console.log(data);
+                        showResult(data.status, vars)
+                    })
+                    .catch((err) => console.log(err));
 
-                    ).catch((err) => console.log(err));
             }
 
-            /* начальные значения контролов и полей X, Y, R. Полностью хардкод 
-            у селекта дефолтное значение вписано прямо в код 
-            в принципе можно добавить массивы начальных значений 
-            и при загрузке страницы генерить контролы по этим значениям, тогда программа
-            будет более универсальной. Эти же массивы можно использовать как списки
-            допустимых значений */
             function init() {
                 document.getElementById("y").value = 0;
                 document.getElementById("varX6").setAttribute("selected", true);
@@ -289,10 +259,12 @@
             }
 
             function showResult(result, vars) {
+
+                console.log(result);
                 let message = "empty message";
                 let color = "empty color";
-                if (result == true) {
-                    // обратная кавычки - типа f-string
+                if (result == "true") {
+
                     message = `Точка с координатами X=${vars.x} и Y=${vars.y} принадлежит заданной области с R=${vars.r}`;
                     color = "green";
                 } else {
@@ -312,7 +284,7 @@
         </header>
         <div class="index">
             <div class="contentblock">
-                <img src="img/capture.png" alt="drawing" />
+                <img src="img/img.png" alt="drawing" />
                 <div class="valN">X=<span id="valX"></span></div>
                 <div class="valN">Y=<span id="valY"></span></div>
                 <div class="valN">R=<span id="valR"></span></div>

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public class FunctionCalc {
@@ -5,11 +6,15 @@ public class FunctionCalc {
 
 
     final Logger logger = LoggerConfig.getLogger(this.getClass().getName());
+
+    public FunctionCalc() throws IOException {
+    }
+
     private boolean isTriangle(Dot dot) {
 
-        var equation = dot.getR()/2*dot.getX() - dot.getR()/2;
+        var equation = -dot.getR()/2*dot.getX() - dot.getR()/2;
 
-        if(dot.getY() > 0 || dot.getX() < 0 || dot.getY() > equation){
+        if(dot.getY() < 0 || dot.getX() < 0 || dot.getY() > equation){
 
             return false;
         }
@@ -19,14 +24,14 @@ public class FunctionCalc {
 
 
     private boolean isCircle(Dot dot) {
-        return dot.getX() * dot.getR() <= 0 && dot.getY() * dot.getR() >= 0 && Math.sqrt(dot.getX() * dot.getX() + dot.getY() * dot.getY()) <= dot.getR();
+        return dot.getX() * (dot.getR()/2) >= 0 && dot.getY() * (dot.getR()/2) >= 0 && Math.sqrt(dot.getX() * dot.getX() + dot.getY() * dot.getY()) <= (dot.getR()/2);
 
 
     }
 
 
     private boolean isRectangle(Dot dot) {
-        return dot.getX() * dot.getR() >= 0 && dot.getY() * dot.getR() >= 0 && dot.getY() <= dot.getR() && dot.getX() <= dot.getR() / 2;
+        return dot.getX() * dot.getR() <= 0 && dot.getY() * dot.getR() >= 0 && dot.getY() <= dot.getR() && dot.getX() >= dot.getR();
 
     }
 
@@ -40,20 +45,20 @@ public class FunctionCalc {
             return true;
         }
 
-        logger.warning("Returned false : x=%d, y=%f, r=%d".formatted(dot.getX(), dot.getY(), dot.getR()));
+        logger.warning("Returned false : x=%d, y=%f, r=%f".formatted(dot.getX(), dot.getY(), dot.getR()));
         return false;
     }
 
 
     private boolean checkY(Dot dot) throws Exception {
-        if( dot.getY() <= 5 && dot.getY() >= -3){
+        if( dot.getY() <= 3 && dot.getY() >= -3){
             return true;
         }
         throw new Exception("Invalid value");
     }
     private boolean checkR(Dot dot) throws Exception {
 
-        int[] array = new int[] {1, 2, 3, 4, 5};
+        double[] array = new double[] {1.0, 1.5, 2.0, 2.5, 3.0};
         for(int i = 0; i < array.length; i++) {
             if(dot.getR() == array[i]) {
                 return true;
@@ -64,7 +69,7 @@ public class FunctionCalc {
 
 
     private boolean checkX(Dot dot) throws Exception {
-        int[] array = new int[] {-3, -2, -1, 0, 1, 2, 3, 4};
+        int[] array = new int[] {-5, -4, -3, -2, -1, 0, 1, 2, 3};
         for(int i = 0; i < array.length; i++) {
             if(dot.getX() == array[i]) {
                 return true;

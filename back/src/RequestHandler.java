@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 public class RequestHandler {
     final Logger logger = LoggerConfig.getLogger(this.getClass().getName());
 
+    public RequestHandler() throws IOException {
+    }
+
 
     public Dot readRequest() throws IOException {
         FCGIInterface.request.inStream.fill();

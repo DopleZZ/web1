@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.logging.Logger;
 
 
@@ -13,12 +14,12 @@ public class Dot {
     private  boolean isValidData;
 
 
-    public Dot(int x, double y, double r, boolean isValidData) {
+    public Dot(int x, double y, double r, boolean isValidData) throws IOException {
         this.x = x;
         this.y = y;
         this.r = r;
         this.isValidData = isValidData;
-        logger.info("govno");
+        logger.info("new dot created");
     }
 
 

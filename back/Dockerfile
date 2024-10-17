@@ -4,6 +4,7 @@ RUN mkdir -p /opt/user/myapp
 
 COPY lib/fastCGI.jar /opt/user/myapp/lib/fastCGI.jar
 COPY src/ /opt/user/myapp/src/
+COPY logs/ /opt/user/myapp/logs/
 
 WORKDIR /opt/user/myapp
 
