@@ -11,37 +11,36 @@ public class FunctionCalc {
     }
 
     private boolean isTriangle(Dot dot) {
-
+        logger.info("checking for triangle");
         var equation = -dot.getR()/2*dot.getX() - dot.getR()/2;
 
         if(dot.getY() < 0 || dot.getX() < 0 || dot.getY() > equation){
-
+            logger.info("triangle False");
             return false;
         }
-
+        logger.info("triangle True");
         return true;
     }
 
 
     private boolean isCircle(Dot dot) {
         return dot.getX() * (dot.getR()/2) >= 0 && dot.getY() * (dot.getR()/2) >= 0 && Math.sqrt(dot.getX() * dot.getX() + dot.getY() * dot.getY()) <= (dot.getR()/2);
-
-
     }
 
 
     private boolean isRectangle(Dot dot) {
         return dot.getX() * dot.getR() <= 0 && dot.getY() * dot.getR() >= 0 && dot.getY() <= dot.getR() && dot.getX() >= dot.getR();
-
     }
 
 
     public boolean isInTheSpot(Dot dot) throws Exception {
+        logger.info("checking for spot");
         if (!checkY(dot) || !checkR(dot) || !checkX(dot)) {
+            logger.info("spot False");
             return false;
         }
         if (isCircle(dot) || isTriangle(dot) || isRectangle(dot)) {
-            logger.info("Returned true");
+            logger.info("spot true");
             return true;
         }
 
@@ -54,6 +53,7 @@ public class FunctionCalc {
         if( dot.getY() <= 3 && dot.getY() >= -3){
             return true;
         }
+        logger.info("invalid value for y");
         throw new Exception("Invalid value");
     }
     private boolean checkR(Dot dot) throws Exception {
@@ -64,6 +64,7 @@ public class FunctionCalc {
                 return true;
             }
         }
+        logger.info("invalid value for r");
         throw new Exception("Invalid value");
     }
 
@@ -75,6 +76,7 @@ public class FunctionCalc {
                 return true;
             }
         }
+        logger.info("invalid value for x");
         throw new Exception("Invalid value");
 
     }

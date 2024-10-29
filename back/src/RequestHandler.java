@@ -25,9 +25,6 @@ public class RequestHandler {
         buffer.clear();
 
         var request = new String(requestBodyRaw, StandardCharsets.UTF_8);
-//       if(!FCGIInterface.request.params.getProperty("REQUEST_METHOD").equals("POST")){
-//            throw new RuntimeException();
-//        }
          logger.info(request);
 
 

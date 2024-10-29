@@ -1,7 +1,4 @@
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.FileHandler;
@@ -13,12 +10,10 @@ public class LoggerConfig {
         Logger logger = Logger.getLogger(name);
         logger.setLevel(Level.INFO);
 
-        FileHandler handler = new FileHandler("text.log", true);
+        FileHandler handler = new FileHandler("logs/text.log", true);
         logger.addHandler(handler);
         SimpleFormatter formatter = new SimpleFormatter();
         handler.setFormatter(formatter);
-
-        //logger.addHandler(new FileHandler("./logs/text.log", true));
         return logger;
     }
 
